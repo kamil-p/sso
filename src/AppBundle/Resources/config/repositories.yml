@@ -1,0 +1,8 @@
+services:
+    user_repository:
+        class: AppBundle\Repository\UserRepository
+        factory:
+            - '@doctrine_mongodb.odm.default_document_manager'
+            - 'getRepository'
+        arguments:
+            - 'AppBundle\Document\User'

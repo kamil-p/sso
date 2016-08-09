@@ -10,11 +10,11 @@
  * ************** CAUTION **************
  */
 
-if(!isset($_SERVER['HTTP_HOST'])) {
+if (!isset($_SERVER['HTTP_HOST'])) {
     exit('This script cannot be run from the CLI. Run it from a browser.');
 }
 
-if(!in_array(@$_SERVER['REMOTE_ADDR'], array(
+if (!in_array(@$_SERVER['REMOTE_ADDR'], array(
     '127.0.0.1',
     '::1',
 ))
@@ -176,7 +176,7 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
                     ready to run Symfony applications.
                 </p>
 
-                <?php if(count($majorProblems)): ?>
+                <?php if (count($majorProblems)): ?>
                     <h2 class="ko">Major problems</h2>
                     <p>Major problems have been detected and <strong>must</strong> be fixed before continuing:</p>
                     <ol>
@@ -188,10 +188,10 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
                     </ol>
                 <?php endif; ?>
 
-                <?php if(count($minorProblems)): ?>
+                <?php if (count($minorProblems)): ?>
                     <h2>Recommendations</h2>
                     <p>
-                        <?php if(count($majorProblems)): ?>Additionally, to<?php else: ?>To<?php endif; ?> enhance your
+                        <?php if (count($majorProblems)): ?>Additionally, to<?php else: ?>To<?php endif; ?> enhance your
                         Symfony experience,
                         it’s recommended that you fix the following:
                     </p>
@@ -204,9 +204,9 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
                     </ol>
                 <?php endif; ?>
 
-                <?php if($symfonyRequirements->hasPhpIniConfigIssue()): ?>
+                <?php if ($symfonyRequirements->hasPhpIniConfigIssue()): ?>
                     <p id="phpini">*
-                        <?php if($symfonyRequirements->getPhpIniConfigPath()): ?>
+                        <?php if ($symfonyRequirements->getPhpIniConfigPath()): ?>
                             Changes to the <strong>php.ini</strong> file must be done in "
                             <strong><?php echo $symfonyRequirements->getPhpIniConfigPath() ?></strong>".
                         <?php else: ?>
@@ -215,12 +215,12 @@ $minorProblems = $symfonyRequirements->getFailedRecommendations();
                     </p>
                 <?php endif; ?>
 
-                <?php if(!count($majorProblems) && !count($minorProblems)): ?>
+                <?php if (!count($majorProblems) && !count($minorProblems)): ?>
                     <p class="ok">All checks passed successfully. Your system is ready to run Symfony applications.</p>
                 <?php endif; ?>
 
                 <ul class="symfony-install-continue">
-                    <?php if(count($majorProblems) || count($minorProblems)): ?>
+                    <?php if (count($majorProblems) || count($minorProblems)): ?>
                         <li><a href="config.php">Re-check configuration</a></li>
                     <?php endif; ?>
                 </ul>

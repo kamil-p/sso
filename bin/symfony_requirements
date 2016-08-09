@@ -10,7 +10,7 @@ $iniPath = $symfonyRequirements->getPhpIniConfigPath();
 echo_title('Symfony Requirements Checker');
 
 echo '> PHP is using the following php.ini file:' . PHP_EOL;
-if($iniPath) {
+if ($iniPath) {
     echo_style('green', '  ' . $iniPath);
 } else {
     echo_style('yellow', '  WARNING: No configuration file (php.ini) used by PHP!');
@@ -23,7 +23,7 @@ echo '> Checking Symfony requirements:' . PHP_EOL . '  ';
 $messages = array();
 foreach ($symfonyRequirements->getRequirements() as $req) {
     /** @var $req Requirement */
-    if($helpText = get_error_message($req, $lineSize)) {
+    if ($helpText = get_error_message($req, $lineSize)) {
         echo_style('red', 'E');
         $messages['error'][] = $helpText;
     } else {
@@ -34,7 +34,7 @@ foreach ($symfonyRequirements->getRequirements() as $req) {
 $checkPassed = empty($messages['error']);
 
 foreach ($symfonyRequirements->getRecommendations() as $req) {
-    if($helpText = get_error_message($req, $lineSize)) {
+    if ($helpText = get_error_message($req, $lineSize)) {
         echo_style('yellow', 'W');
         $messages['warning'][] = $helpText;
     } else {
@@ -42,7 +42,7 @@ foreach ($symfonyRequirements->getRecommendations() as $req) {
     }
 }
 
-if($checkPassed) {
+if ($checkPassed) {
     echo_block('success', 'OK', 'Your system is ready to run Symfony projects');
 } else {
     echo_block('error', 'ERROR', 'Your system is not ready to run Symfony projects');
@@ -54,7 +54,7 @@ if($checkPassed) {
     }
 }
 
-if(!empty($messages['warning'])) {
+if (!empty($messages['warning'])) {
     echo_title('Optional recommendations to improve your setup', 'yellow');
 
     foreach ($messages['warning'] as $helpText) {
@@ -77,7 +77,7 @@ exit($checkPassed ? 0 : 1);
 
 function get_error_message(Requirement $requirement, $lineSize)
 {
-    if($requirement->isFulfilled()) {
+    if ($requirement->isFulfilled()) {
         return;
     }
 
@@ -131,8 +131,8 @@ function has_color_support()
 {
     static $support;
 
-    if(null === $support) {
-        if(DIRECTORY_SEPARATOR == '\\') {
+    if (null === $support) {
+        if (DIRECTORY_SEPARATOR == '\\') {
             $support = false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI');
         } else {
             $support = function_exists('posix_isatty') && @posix_isatty(STDOUT);

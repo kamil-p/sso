@@ -3,22 +3,39 @@
 security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
-    providers:
-        in_memory:
-            memory: ~
+  providers:
+    in_memory:
+      memory: ~
 
-    firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+  firewalls:
+      # disables authentication for assets and the profiler, adapt it according to your needs
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
 
-        main:
-            anonymous: ~
-            # activate different ways to authenticate
+    main:
+      anonymous: ~
+        # activate different ways to authenticate
+        # http_basic: ~
+        # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+        # form_login: ~
+        # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
 
-            # http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+    login:
+      pattern:  ^/api/login
+      stateless: true
+      anonymous: true
+      form_login:
+        check_path:               /api/login_check
+        success_handler:          lexik_jwt_authentication.handler.authentication_success
+        failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+        require_previous_session: false
 
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+    api:
+      pattern:   ^/api
+      stateless: true
+      lexik_jwt: ~
+
+  access_control:
+    - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
