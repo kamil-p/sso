@@ -60,22 +60,28 @@ abstract class CreateAdminCommand extends ContainerAwareCommand
         $this->output = $output;
         $this->questionHelper = $this->getHelper('question');
 
+
         $address = new Address($companyName, $street, $postCode, $this->getPhoneNumber(), $countryCode);
 
         $admin = new User(
             $this->getEmail(),
-            $this->getPassword(),
             $address
         );
 
+        $encoder = $this->getContainer()->get('security.password_encoder');
+        $encodedPassword = $encoder->encodePassword($admin, $this->getPassword());
+
+        $admin->setPassword($encodedPassword);
         foreach (User::$ROLES as $role) {
             $admin->addRole($role);
         }
 
         $this->userRepository->save($admin);
+
+        $this->output->writeln('<info>New admin user has been created!</info>');
     }
 
-    protected function getEmail() : String
+    protected function getEmail(): String
     {
         $question = new Question('<info>' . self::ADMIN_EMAIL_QUESTION . '</info>');
 
@@ -86,7 +92,7 @@ abstract class CreateAdminCommand extends ContainerAwareCommand
         return $email;
     }
 
-    protected function getPassword() : string
+    protected function getPassword(): string
     {
         $question = new Question('<info>' . self::ADMIN_PASSWORD_QUESTION . '</info>');
 

@@ -3,9 +3,11 @@
 namespace UserBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use UserBundle\Exception\Document\InvalidRoleException;
 
-abstract class User
+abstract class User implements UserInterface, EquatableInterface
 {
     const ROLE_ADMIN = 'ROLE_ADMIN';
     const ROLE_USER = 'ROLE_USER';
@@ -16,20 +18,20 @@ abstract class User
     ];
 
     /**
-     * @var string
+     * @var String
      * @MongoDB\Id
      */
     protected $id;
 
     /**
-     * @var string
+     * @var String
      * @MongoDB\Field
      * @MongoDB\Index(unique=true)
      */
     protected $email;
 
     /**
-     * @var string
+     * @var String
      * @MongoDB\Field
      */
     protected $password;
@@ -52,14 +54,17 @@ abstract class User
      */
     protected $roles = [];
 
-    public function __construct(String $email, String $password, Address $address)
+    public function __construct(String $email, Address $address)
     {
         $this->email = $email;
-        $this->password = $password;
-        base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
         $this->enabled = true;
         $this->address = $address->toArray();
         $this->roles = [];
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
     }
 
     public function addRole(String $role)
@@ -71,7 +76,7 @@ abstract class User
         }
     }
 
-    public function hasRole(String $role) : Bool
+    public function hasRole(String $role): Bool
     {
         $result = false;
         if (in_array($role, $this->roles)) {
@@ -79,5 +84,51 @@ abstract class User
         }
         return $result;
     }
+
+    public function isEqualTo(UserInterface $user): Bool
+    {
+
+        if ($this->password !== $user->getPassword()) {
+            return false;
+        }
+
+        if ($this->email !== $user->getUsername()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getPassword(): String
+    {
+        return $this->password;
+    }
+
+    public function getUsername(): String
+    {
+        return $this->getEmail();
+    }
+
+    public function eraseCredentials()
+    {
+        $this->password = null;
+    }
+
+    public function getEmail(): String
+    {
+        return $this->email;
+    }
+
+    public function getSalt()
+    {
+        /* bcrypt (security.yml) doesn't need to have salt it is doing it internally */
+        return null;
+    }
+
+    public function setPassword(String $password)
+    {
+        $this->password = $password;
+    }
+
 
 }

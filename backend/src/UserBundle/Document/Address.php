@@ -23,32 +23,32 @@ class Address
         ];
     }
 
-    public function getCompanyName() : String
+    public function getCompanyName(): String
     {
         return $this->address['companyName'];
     }
 
-    public function getStreet() : String
+    public function getStreet(): String
     {
         return $this->address['street'];
     }
 
-    public function getPostCode() : String
+    public function getPostCode(): String
     {
         return $this->address['postCode'];
     }
 
-    public function getPhone() : String
+    public function getPhone(): String
     {
         return $this->address['phone'];
     }
 
-    public function getCountryCode() : String
+    public function getCountryCode(): String
     {
         return $this->address['countryCode'];
     }
 
-    public function toArray() : array
+    public function toArray(): array
     {
         return $this->address;
     }
